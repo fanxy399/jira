@@ -1,7 +1,7 @@
 
 import {useState, useEffect} from 'react'
 import qs from 'querystring'
-import {cleanObject} from 'utils'
+import {cleanObject, useMount, useDebounce} from 'utils'
 import List from 'Screens/List'
 import Search from 'Screens/Search'
 
@@ -11,20 +11,21 @@ export default function Screens() {
     name:'',
     personId: ''
   })
+  const debounceSearch = useDebounce(search, 2000)
   const [list, setList] = useState([])
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    fetch(`${api}/projects?${qs.stringify(cleanObject(search))}`).then( async res => {
+    fetch(`${api}/projects?${qs.stringify(cleanObject(debounceSearch))}`).then( async res => {
       if(res.ok) setList(await res.json())
     })
-  }, [api, search])
+  }, [api, debounceSearch])
 
-  useEffect(() => {
+  useMount(() => {
     fetch(`${api}/users`).then(async res => {
       if(res.ok) setUsers(await res.json())
     })
-  }, [api])
+  })
 
   return (
     <div>
