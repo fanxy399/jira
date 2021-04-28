@@ -1,4 +1,4 @@
-import { User } from "Screens/List";
+import { User } from "Screens/Projects/List";
 
 interface SearchProps {
   search: {

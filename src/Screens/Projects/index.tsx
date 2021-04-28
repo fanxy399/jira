@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import qs from "querystring";
 import { cleanObject, useMount, useDebounce } from "utils";
-import List from "Screens/List";
-import Search from "Screens/Search";
+import List from "Screens/Projects/List";
+import Search from "Screens/Projects/Search";
 
 export default function Screens() {
   const api = process.env.REACT_APP_API_URL;
@@ -10,7 +10,7 @@ export default function Screens() {
     name: "",
     personId: "",
   });
-  const debounceSearch = useDebounce(search, 2000);
+  const debounceSearch = useDebounce(search, 500);
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
 
