@@ -14,29 +14,38 @@ export const handleUserResponse = ({ user }: { user: User }) => {
 
 // 注册
 export const register = (params: { username: string; password: string }) => {
-  fetch(`${API}/register`, {
+  return fetch(`${API}/register`, {
     method: "post",
     headers: {
       "Content-type": "application/json",
     },
     body: JSON.stringify(params),
   }).then(async (res) => {
-    if (res.ok) handleUserResponse(await res.json());
+    if (res.ok) {
+      return handleUserResponse(await res.json());
+    } else {
+      return Promise.reject(res);
+    }
   });
 };
 
 // 登陆
 export const login = (params: { username: string; password: string }) => {
-  fetch(`${API}/login`, {
+  return fetch(`${API}/login`, {
     method: "post",
     headers: {
       "Content-type": "application/json",
     },
     body: JSON.stringify(params),
   }).then(async (res) => {
-    if (res.ok) handleUserResponse(await res.json());
+    if (res.ok) {
+      return handleUserResponse(await res.json());
+    } else {
+      return Promise.reject(res);
+    }
   });
 };
 
 // 登出
-export const loginOut = () => window.localStorage.removeItem(localStorageKey);
+export const logout = async () =>
+  window.localStorage.removeItem(localStorageKey);
