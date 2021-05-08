@@ -1,11 +1,23 @@
 import React, { useState, useContext } from "react";
 import * as auth from "auth-provider";
 import { User } from "Screens/Projects/List";
+import { http } from "utils/http";
+import { useMount } from "utils";
 
 interface Authform {
   username: string;
   password: string;
 }
+
+const bootstrapUser = async () => {
+  let user = null;
+  const token = auth.token();
+  if (token) {
+    const data = await http("me", { token });
+    user = data.user;
+  }
+  return user;
+};
 
 const AuthContext = React.createContext<
   | {
@@ -25,7 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     auth.login(form).then((user) => setUser(user));
   const register = (form: Authform) => auth.register(form).then(setUser); // setUser === (user => setUser(user)) 消除参数
   const logout = () => auth.logout().then(() => setUser(null));
-
+  useMount(() => {
+    bootstrapUser().then(setUser);
+  });
   return (
     <AuthContext.Provider
       children={children}

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import qs from "querystring";
 import { cleanObject, useMount, useDebounce } from "utils";
 import List from "Screens/Projects/List";
 import Search from "Screens/Projects/Search";
+import { useHttp } from "utils/http";
 
 export default function Screens() {
-  const api = process.env.REACT_APP_API_URL;
   const [search, setSearch] = useState({
     name: "",
     personId: "",
@@ -13,19 +12,15 @@ export default function Screens() {
   const debounceSearch = useDebounce(search, 500);
   const [list, setList] = useState([]);
   const [users, setUsers] = useState([]);
+  const client = useHttp();
 
   useEffect(() => {
-    fetch(`${api}/projects?${qs.stringify(cleanObject(debounceSearch))}`).then(
-      async (res) => {
-        if (res.ok) setList(await res.json());
-      }
-    );
-  }, [api, debounceSearch]);
+    client("projects", { data: cleanObject(debounceSearch) }).then(setList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceSearch]);
 
   useMount(() => {
-    fetch(`${api}/users`).then(async (res) => {
-      if (res.ok) setUsers(await res.json());
-    });
+    client("users").then(setUsers);
   });
 
   return (
