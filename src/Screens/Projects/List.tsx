@@ -1,4 +1,5 @@
 import React from "react";
+import { Table } from "antd";
 
 interface ListProps {
   list: Project[];
@@ -22,30 +23,29 @@ export interface User {
 export default function List(props: ListProps) {
   const { list, users } = props;
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <td>项目名</td>
-            <td>项目组</td>
-            <td>项目负责人</td>
-          </tr>
-        </thead>
-        <tbody>
-          {list.map((item) => {
+    <Table
+      pagination={false}
+      columns={[
+        {
+          title: "项目名",
+          dataIndex: "name",
+          sorter: (a, b) => a.name.localeCompare(a.name),
+        },
+        { title: "项目名", dataIndex: "organization" },
+        {
+          key: "id",
+          title: "项目负责人",
+          render(value, project) {
             return (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.organization}</td>
-                <td>
-                  {users.find((user) => user.id === item.personId)?.name ||
-                    "未知"}
-                </td>
-              </tr>
+              <span>
+                {users.find((user) => user.id === project.personId)?.name ||
+                  "未知"}
+              </span>
             );
-          })}
-        </tbody>
-      </table>
-    </div>
+          },
+        },
+      ]}
+      dataSource={list}
+    />
   );
 }

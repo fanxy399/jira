@@ -1,25 +1,12 @@
 import { useAuth } from "context/auth-context";
 import Authenticated from "Authenticated";
 import Unauthenticated from "Screens/Unauthenticated";
+import "App.css";
 
 function App() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   return (
-    <div className="App">
-      <div></div>
-      {user ? (
-        <>
-          <div>
-            欢迎登陆， 用户名：{user.name}
-            <button onClick={logout}>登出</button>
-          </div>
-          <br />
-          <Authenticated />
-        </>
-      ) : (
-        <Unauthenticated />
-      )}
-    </div>
+    <div className="App">{user ? <Authenticated /> : <Unauthenticated />}</div>
   );
 }
 

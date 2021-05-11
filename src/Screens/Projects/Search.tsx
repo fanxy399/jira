@@ -1,4 +1,5 @@
 import { User } from "Screens/Projects/List";
+import { Input, Select } from "antd";
 
 interface SearchProps {
   search: {
@@ -12,23 +13,24 @@ interface SearchProps {
 export default function Search(props: SearchProps) {
   const { search, setSearch, users } = props;
   return (
-    <div>
-      <input
+    <div style={{ margin: "10px 0px", display: "flex" }}>
+      <Input
+        style={{ marginRight: "50px" }}
         type="text"
         value={search.name}
         onChange={(e) => setSearch({ ...search, name: e.target.value })}
       />
-      <select
+      <Select
         value={search.personId}
-        onChange={(e) => setSearch({ ...search, personId: e.target.value })}
+        onChange={(value) => setSearch({ ...search, personId: value })}
       >
-        <option value="">负责人</option>
+        <Select.Option value="">负责人</Select.Option>
         {users.map((el) => (
-          <option value={el.id} key={el.id}>
+          <Select.Option value={el.id} key={el.id}>
             {el.name}
-          </option>
+          </Select.Option>
         ))}
-      </select>
+      </Select>
     </div>
   );
 }
