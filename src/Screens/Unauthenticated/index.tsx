@@ -4,20 +4,32 @@ import Register from "Screens/Unauthenticated/Register";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
-import { Button, Card, Divider } from "antd";
+import { Button, Card, Divider, Typography } from "antd";
 import styled from "styled-components";
 
 export default function Unauthenticated() {
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const handleToggle = () => {
+    setIsRegister(!isRegister);
+    setError(null);
+  };
   return (
     <Container>
       <Header />
       <Background />
       <ShadowCard>
         <Title>{isRegister ? "请注册" : "请登录"}</Title>
-        {isRegister ? <Register /> : <Login />}
+        {error && (
+          <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+        )}
+        {isRegister ? (
+          <Register onError={setError} />
+        ) : (
+          <Login onError={setError} />
+        )}
         <Divider />
-        <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
+        <Button type={"link"} onClick={handleToggle}>
           {isRegister ? "已经有账号了？直接登录" : "没有账号？注册新账号"}
         </Button>
       </ShadowCard>

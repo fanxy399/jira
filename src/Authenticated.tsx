@@ -2,7 +2,7 @@
 // import TsUseArray from "Screens/TsUseArray";
 import Screens from "Screens/Projects";
 import styled from "styled-components";
-import { Menu, Dropdown } from "antd";
+import { Menu, Dropdown, Button } from "antd";
 import { useAuth } from "context/auth-context";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
@@ -22,20 +22,16 @@ export default function Authenticated() {
             overlay={
               <Menu>
                 <Menu.Item>
-                  {/* // eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a className="ant-dropdown-link" onClick={logout}>
+                  <Button type="link" onClick={logout}>
                     退出登录
-                  </a>
+                  </Button>
                 </Menu.Item>
               </Menu>
             }
           >
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
+            <Button type="link" onClick={(e) => e.preventDefault()}>
               Hi, {user?.name}
-            </a>
+            </Button>
           </Dropdown>
         </HeaderRight>
       </Header>

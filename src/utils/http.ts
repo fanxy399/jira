@@ -35,7 +35,7 @@ export const http = async (
     if (reponse.ok) {
       return data;
     } else {
-      return Promise.reject(data);
+      return Promise.reject(await reponse.json());
     }
   });
 };
