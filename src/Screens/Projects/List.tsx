@@ -1,5 +1,6 @@
 import React from "react";
 import { Table } from "antd";
+import dayjs from "dayjs";
 
 interface ListProps {
   list: Project[];
@@ -11,7 +12,7 @@ interface Project {
   name: string;
   personId: string;
   organization: string;
-  created: string;
+  created: number;
 }
 
 export interface User {
@@ -31,7 +32,7 @@ export default function List(props: ListProps) {
           dataIndex: "name",
           sorter: (a, b) => a.name.localeCompare(a.name),
         },
-        { title: "项目名", dataIndex: "organization" },
+        { title: "部门", dataIndex: "organization" },
         {
           key: "id",
           title: "项目负责人",
@@ -40,6 +41,18 @@ export default function List(props: ListProps) {
               <span>
                 {users.find((user) => user.id === project.personId)?.name ||
                   "未知"}
+              </span>
+            );
+          },
+        },
+        {
+          title: "创建时间",
+          render(value, project) {
+            return (
+              <span>
+                {project.created
+                  ? dayjs(project.created).format("YYYY-MM-DD")
+                  : "无"}
               </span>
             );
           },
