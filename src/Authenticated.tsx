@@ -2,42 +2,57 @@
 // import TsUseArray from "Screens/TsUseArray";
 import Screens from "Screens/Projects";
 import styled from "styled-components";
+import { Routes, Route, Navigate } from "react-router";
 import { Menu, Dropdown, Button } from "antd";
 import { useAuth } from "context/auth-context";
 import { Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
+import Project from "Screens/Projects/Project";
+import { resetRoute } from "utils";
 
-export default function Authenticated() {
+const PageHeader = () => {
   const { user, logout } = useAuth();
   return (
-    <Container>
-      <Header>
-        <HeaderLeft gap={true}>
+    <Header>
+      <HeaderLeft gap={true}>
+        <Button type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
-          <div>项目</div>
-          <div>用户</div>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item>
-                  <Button type="link" onClick={logout}>
-                    退出登录
-                  </Button>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <Button type="link" onClick={(e) => e.preventDefault()}>
-              Hi, {user?.name}
-            </Button>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
+        </Button>
+        <div>项目</div>
+        <div>用户</div>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item>
+                <Button type="link" onClick={logout}>
+                  退出登录
+                </Button>
+              </Menu.Item>
+            </Menu>
+          }
+        >
+          <Button type="link" onClick={(e) => e.preventDefault()}>
+            Hi, {user?.name}
+          </Button>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
+  );
+};
+
+export default function Authenticated() {
+  return (
+    <Container>
+      <PageHeader />
       <Nav>Nav</Nav>
       <Main>
-        <Screens />
+        <Routes>
+          <Route path={"/projects"} element={<Screens />} />
+          <Route path={"/projects/:projectId/*"} element={<Project />} />
+          <Navigate to={"/projects"} />
+        </Routes>
         {/* <hr />
         <TsUseArray /> */}
       </Main>
