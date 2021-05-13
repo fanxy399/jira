@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDebounce } from "utils";
+import { useDebounce, useDoucmentTitle } from "utils";
 import List from "Screens/Projects/List";
 import Search from "Screens/Projects/Search";
 import { Typography } from "antd";
@@ -14,6 +14,7 @@ export default function Screens() {
   const debounceSearch = useDebounce(search, 500);
   const { isLoading, data: list, error } = useProject(debounceSearch);
   const { data: users } = useUser();
+  useDoucmentTitle("项目列表", false);
 
   return (
     <div>

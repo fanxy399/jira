@@ -6,6 +6,7 @@ import left from "assets/left.svg";
 import right from "assets/right.svg";
 import { Button, Card, Divider, Typography } from "antd";
 import styled from "styled-components";
+import { useDoucmentTitle } from "utils";
 
 export default function Unauthenticated() {
   const [isRegister, setIsRegister] = useState(false);
@@ -14,6 +15,7 @@ export default function Unauthenticated() {
     setIsRegister(!isRegister);
     setError(null);
   };
+  useDoucmentTitle(`${isRegister ? "请注册" : "请登录"}`, false);
   return (
     <Container>
       <Header />
