@@ -1,16 +1,13 @@
-import { useState } from "react";
 import { useDebounce, useDoucmentTitle } from "utils";
 import List from "Screens/Projects/List";
 import Search from "Screens/Projects/Search";
 import { Typography } from "antd";
 import { useProject } from "utils/project";
 import { useUser } from "utils/user";
+import { useUrlQueryParams } from "utils/url";
 
 export default function Screens() {
-  const [search, setSearch] = useState({
-    name: "",
-    personId: "",
-  });
+  const [search, setSearch] = useUrlQueryParams(["name", "personId"]);
   const debounceSearch = useDebounce(search, 500);
   const { isLoading, data: list, error } = useProject(debounceSearch);
   const { data: users } = useUser();
@@ -26,3 +23,5 @@ export default function Screens() {
     </div>
   );
 }
+
+Screens.whyDidYouRender = true;

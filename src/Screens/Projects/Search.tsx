@@ -30,7 +30,7 @@ export default function Search(props: SearchProps) {
         >
           <Select.Option value="">负责人</Select.Option>
           {users.map((el) => (
-            <Select.Option value={el.id} key={el.id}>
+            <Select.Option value={String(el.id)} key={el.id}>
               {el.name}
             </Select.Option>
           ))}
