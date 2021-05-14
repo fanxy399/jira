@@ -4,10 +4,10 @@ import Search from "Screens/Projects/Search";
 import { Typography } from "antd";
 import { useProject } from "utils/project";
 import { useUser } from "utils/user";
-import { useUrlQueryParams } from "utils/url";
+import { useProjectSearchParams } from "./util";
 
 export default function Screens() {
-  const [search, setSearch] = useUrlQueryParams(["name", "personId"]);
+  const [search, setSearch] = useProjectSearchParams();
   const debounceSearch = useDebounce(search, 500);
   const { isLoading, data: list, error } = useProject(debounceSearch);
   const { data: users } = useUser();

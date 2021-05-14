@@ -1,17 +1,15 @@
-import { User } from "Screens/Projects/List";
-import { Input, Select, Form } from "antd";
+import { Project, User } from "Screens/Projects/List";
+import { Input, Form } from "antd";
+import UserSelect from "components/UserSelect";
 
 interface SearchProps {
-  search: {
-    name: string;
-    personId: string;
-  };
+  search: Partial<Pick<Project, "name" | "personId">>;
   setSearch: (params: SearchProps["search"]) => void;
   users: User[];
 }
 
 export default function Search(props: SearchProps) {
-  const { search, setSearch, users } = props;
+  const { search, setSearch } = props;
   return (
     <Form style={{ marginBottom: "1rem" }} layout="inline">
       <Form.Item>
@@ -24,17 +22,11 @@ export default function Search(props: SearchProps) {
         />
       </Form.Item>
       <Form.Item>
-        <Select
+        <UserSelect
+          defaultOptionName={"负责人"}
           value={search.personId}
           onChange={(value) => setSearch({ ...search, personId: value })}
-        >
-          <Select.Option value="">负责人</Select.Option>
-          {users.map((el) => (
-            <Select.Option value={String(el.id)} key={el.id}>
-              {el.name}
-            </Select.Option>
-          ))}
-        </Select>
+        />
       </Form.Item>
     </Form>
   );
