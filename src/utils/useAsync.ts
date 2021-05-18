@@ -26,11 +26,20 @@ export const useAsync = <D>(
   });
   const config = { ...defaultConfig, ...initialConfig };
   const setData = (data: D) => setState({ data, stat: "success", error: null });
+  const [reTry, setReTry] = useState(() => () => {});
   const setError = (error: Error) =>
     setState({ error, data: null, stat: "error" });
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { reTry: () => Promise<D> }
+  ) => {
     if (!promise || !promise.then) throw new Error("请传入 Promise 类型数据");
     setState({ ...state, stat: "loading" });
+    setReTry(() => () => {
+      if (runConfig?.reTry) {
+        run(runConfig?.reTry(), runConfig);
+      }
+    });
     return promise
       .then((res) => {
         setData(res);
@@ -48,6 +57,7 @@ export const useAsync = <D>(
     isError: state.stat === "error",
     isLoading: state.stat === "loading",
     run,
+    reTry,
     setData,
     setError,
     ...state,

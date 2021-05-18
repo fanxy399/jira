@@ -7,10 +7,45 @@ import { useAsync } from "./useAsync";
 export const useProject = (params?: Partial<Project>) => {
   const client = useHttp();
   const { run, ...result } = useAsync<Project[]>();
-
+  const fetchProjects = () =>
+    client("projects", { data: cleanObject(params || {}) });
   useEffect(() => {
-    run(client("projects", { data: cleanObject(params || {}) }));
+    run(fetchProjects(), { reTry: fetchProjects });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
   return result;
+};
+
+export const useEditProject = () => {
+  const client = useHttp();
+  const { run, ...result } = useAsync<Project[]>();
+  const mutate = (params: Partial<Project>) => {
+    return run(
+      client(`projects/${params.id}`, {
+        method: "PATCH",
+        data: params,
+      })
+    );
+  };
+  return {
+    mutate,
+    ...result,
+  };
+};
+
+export const useAddProject = () => {
+  const client = useHttp();
+  const { run, ...result } = useAsync();
+  const mutate = (params: Partial<Project>) => {
+    return run(
+      client(`projects/${params.id}`, {
+        method: "POST",
+        data: params,
+      })
+    );
+  };
+  return {
+    mutate,
+    ...result,
+  };
 };

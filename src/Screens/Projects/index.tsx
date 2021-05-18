@@ -9,7 +9,7 @@ import { useProjectSearchParams } from "./util";
 export default function Screens() {
   const [search, setSearch] = useProjectSearchParams();
   const debounceSearch = useDebounce(search, 500);
-  const { isLoading, data: list, error } = useProject(debounceSearch);
+  const { isLoading, data: list, error, reTry } = useProject(debounceSearch);
   const { data: users } = useUser();
   useDoucmentTitle("项目列表", false);
 
@@ -19,7 +19,12 @@ export default function Screens() {
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
-      <List dataSource={list || []} users={users || []} loading={isLoading} />
+      <List
+        refresh={reTry}
+        dataSource={list || []}
+        users={users || []}
+        loading={isLoading}
+      />
     </div>
   );
 }

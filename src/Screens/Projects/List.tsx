@@ -2,9 +2,12 @@ import React from "react";
 import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import CustomRate from "components/CustomRate";
+import { useEditProject } from "utils/project";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
+  refresh?: () => void;
 }
 
 export interface Project {
@@ -12,6 +15,7 @@ export interface Project {
   name: string;
   personId: number;
   organization: string;
+  pin: boolean;
   created: number;
 }
 
@@ -21,14 +25,28 @@ export interface User {
   token: string;
 }
 
-export default function List({ users, ...props }: ListProps) {
+export default function List({ users, refresh, ...props }: ListProps) {
+  const { mutate } = useEditProject();
   return (
     <Table
+      rowKey={"id"}
       pagination={false}
       columns={[
         {
+          title: <CustomRate checked={true} disabled={true} />,
+          render: (value, project) => {
+            return (
+              <CustomRate
+                checked={project.pin}
+                onCheckedChange={(pin) => {
+                  mutate({ id: project.id, pin }).then(() => refresh?.());
+                }}
+              />
+            );
+          },
+        },
+        {
           title: "项目名",
-          key: "name",
           sorter: (a, b) => a.name.localeCompare(a.name),
           render: (value, project) => {
             return <Link to={String(project.id)}>{project.name}</Link>;
@@ -36,7 +54,6 @@ export default function List({ users, ...props }: ListProps) {
         },
         { title: "部门", dataIndex: "organization" },
         {
-          key: "id",
           title: "项目负责人",
           render(value, project) {
             return (
