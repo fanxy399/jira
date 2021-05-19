@@ -1,61 +1,80 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import TsUseArray from "Screens/TsUseArray";
+import { useState } from "react";
 import Screens from "Screens/Projects";
 import styled from "styled-components";
 import { Routes, Route, Navigate } from "react-router";
 import { Menu, Dropdown, Button } from "antd";
 import { useAuth } from "context/auth-context";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import Project from "Screens/Projects/Project";
 import { resetRoute } from "utils";
+import ProjectModal from "Screens/Projects/ProjectModal";
+import ProjectPopover from "Screens/Projects/ProjectPopover";
 
-const PageHeader = () => {
+const User = () => {
   const { user, logout } = useAuth();
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item>
+            <Button type="link" onClick={logout}>
+              退出登录
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type="link" onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
+  );
+};
+
+const PageHeader = (props: {
+  setProjectModalOpen: (isOpen: boolean) => void;
+}) => {
   return (
     <Header>
       <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
+        <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
-        </Button>
-        <div>项目</div>
-        <div>用户</div>
+        </ButtonNoPadding>
+        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
+        <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item>
-                <Button type="link" onClick={logout}>
-                  退出登录
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type="link" onClick={(e) => e.preventDefault()}>
-            Hi, {user?.name}
-          </Button>
-        </Dropdown>
+        <User />
       </HeaderRight>
     </Header>
   );
 };
 
 export default function Authenticated() {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
-      <PageHeader />
+      <PageHeader setProjectModalOpen={setProjectModalOpen} />
       <Nav>Nav</Nav>
       <Main>
         <Routes>
-          <Route path={"/projects"} element={<Screens />} />
+          <Route
+            path={"/projects"}
+            element={<Screens setProjectModalOpen={setProjectModalOpen} />}
+          />
           <Route path={"/projects/:projectId/*"} element={<Project />} />
           <Navigate to={"/projects"} />
         </Routes>
         {/* <hr />
         <TsUseArray /> */}
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
       <Aside>Aside</Aside>
       <Footer>Footer</Footer>
     </Container>

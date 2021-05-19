@@ -1,4 +1,4 @@
-import { Spin, Typography } from "antd";
+import { Spin, Typography, Button } from "antd";
 import styled from "styled-components";
 import { DevTools } from "jira-dev-tool";
 
@@ -43,3 +43,7 @@ export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
     <DevTools />
   </FullPage>
 );
+
+export const ButtonNoPadding = styled(Button)`
+  padding: 0;
+`;
