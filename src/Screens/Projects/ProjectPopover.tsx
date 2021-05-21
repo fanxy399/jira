@@ -3,11 +3,11 @@ import { ButtonNoPadding } from "components/lib";
 import React from "react";
 import styled from "styled-components";
 import { useProject } from "utils/project";
+import { useProjectModal } from "./util";
 
-export default function ProjectPopover(props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) {
+export default function ProjectPopover() {
   const { isLoading, data: projectList } = useProject();
+  const { open } = useProjectModal();
   const pinedPorjectList = projectList?.filter((el) => el.pin);
   const content = (
     <ContentContainer>
@@ -20,10 +20,7 @@ export default function ProjectPopover(props: {
         ))}
       </List>
       <Divider />
-      <ButtonNoPadding
-        type={"link"}
-        onClick={() => props.setProjectModalOpen(true)}
-      >
+      <ButtonNoPadding type={"link"} onClick={() => open()}>
         添加项目
       </ButtonNoPadding>
     </ContentContainer>

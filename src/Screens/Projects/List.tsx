@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import CustomRate from "components/CustomRate";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModal } from "./util";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
 export interface Project {
@@ -27,13 +27,9 @@ export interface User {
   token: string;
 }
 
-export default function List({
-  users,
-  refresh,
-  setProjectModalOpen,
-  ...props
-}: ListProps) {
+export default function List({ users, refresh, ...props }: ListProps) {
   const { mutate } = useEditProject();
+  const { open } = useProjectModal();
   return (
     <Table
       rowKey={"id"}
@@ -90,10 +86,7 @@ export default function List({
                 overlay={
                   <Menu>
                     <Menu.Item key={"edit"}>
-                      <ButtonNoPadding
-                        type={"link"}
-                        onClick={() => setProjectModalOpen(true)}
-                      >
+                      <ButtonNoPadding type={"link"} onClick={() => open()}>
                         编辑
                       </ButtonNoPadding>
                     </Menu.Item>

@@ -1,19 +1,15 @@
 import { Drawer } from "antd";
 import React from "react";
+import { useProjectModal } from "./util";
 
-export default function ProjectModal({
-  projectModalOpen,
-  onClose,
-}: {
-  projectModalOpen: boolean;
-  onClose: () => void;
-}) {
+export default function ProjectModal() {
+  const { projectModalOpen, close } = useProjectModal();
   return (
     <Drawer
       width={"100%"}
       title="Basic Drawer"
       placement="right"
-      onClose={onClose}
+      onClose={close}
       visible={projectModalOpen}
     >
       <p>Some contents...</p>
