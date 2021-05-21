@@ -12,7 +12,7 @@ export const useProject = (params?: Partial<Project>) => {
     [client, params]
   );
   useEffect(() => {
-    run(fetchProjects(), { reTry: fetchProjects });
+    run(fetchProjects(), { retry: fetchProjects });
   }, [fetchProjects, params, run]);
   return result;
 };

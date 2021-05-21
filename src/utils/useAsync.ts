@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useReducer } from "react";
 import { useMountedRef } from "utils";
 
 interface State<D> {
@@ -17,37 +17,50 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+  return useCallback(
+    (...args) => (mountedRef.current ? dispatch(...args) : void 0),
+    [mountedRef, dispatch]
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
 ) => {
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitialState,
-    ...initialState,
-  });
-  const mountedRef = useMountedRef();
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultInitialState,
+      ...initialState,
+    }
+  );
+  const safeDispatch = useSafeDispatch(dispatch);
   const config = { ...defaultConfig, ...initialConfig };
   const [reTry, setReTry] = useState(() => () => {});
   const setData = useCallback(
-    (data: D) => setState({ data, stat: "success", error: null }),
-    []
+    (data: D) => safeDispatch({ data, stat: "success", error: null }),
+    [safeDispatch]
   );
   const setError = useCallback(
-    (error: Error) => setState({ error, data: null, stat: "error" }),
-    []
+    (error: Error) => safeDispatch({ error, data: null, stat: "error" }),
+    [safeDispatch]
   );
   const run = useCallback(
-    (promise: Promise<D>, runConfig?: { reTry: () => Promise<D> }) => {
-      if (!promise || !promise.then) throw new Error("请传入 Promise 类型数据");
-      setState((prevState) => ({ ...prevState, stat: "loading" }));
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) {
+        throw new Error("请传入 Promise 类型数据");
+      }
       setReTry(() => () => {
-        if (runConfig?.reTry) {
-          run(runConfig?.reTry(), runConfig);
+        if (runConfig?.retry) {
+          run(runConfig?.retry(), runConfig);
         }
       });
+      safeDispatch({ stat: "loading" });
       return promise
         .then((res) => {
-          if (mountedRef.current) setData(res);
+          setData(res);
           return res;
         })
         .catch((err) => {
@@ -56,7 +69,7 @@ export const useAsync = <D>(
           return err;
         });
     },
-    [config.throwOnError, mountedRef, setData, setError]
+    [config.throwOnError, setData, setError, safeDispatch]
   );
   return {
     isIdle: state.stat === "idle",
