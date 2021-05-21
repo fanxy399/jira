@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import CustomRate from "components/CustomRate";
 import { useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "store/slice/porjectList";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
 export interface Project {
@@ -27,13 +28,9 @@ export interface User {
   token: string;
 }
 
-export default function List({
-  users,
-  refresh,
-  setProjectModalOpen,
-  ...props
-}: ListProps) {
+export default function List({ users, refresh, ...props }: ListProps) {
   const { mutate } = useEditProject();
+  const dispatch = useDispatch();
   return (
     <Table
       rowKey={"id"}
@@ -92,7 +89,9 @@ export default function List({
                     <Menu.Item key={"edit"}>
                       <ButtonNoPadding
                         type={"link"}
-                        onClick={() => setProjectModalOpen(true)}
+                        onClick={() =>
+                          dispatch(projectListActions.openProjectModal())
+                        }
                       >
                         编辑
                       </ButtonNoPadding>

@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // import TsUseArray from "Screens/TsUseArray";
-import { useState } from "react";
 import Screens from "Screens/Projects";
 import styled from "styled-components";
 import { Routes, Route, Navigate } from "react-router";
@@ -34,16 +33,14 @@ const User = () => {
   );
 };
 
-const PageHeader = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+const PageHeader = () => {
   return (
     <Header>
       <HeaderLeft gap={true}>
         <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </ButtonNoPadding>
-        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
@@ -54,27 +51,20 @@ const PageHeader = (props: {
 };
 
 export default function Authenticated() {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
+      <PageHeader />
       <Nav>Nav</Nav>
       <Main>
         <Routes>
-          <Route
-            path={"/projects"}
-            element={<Screens setProjectModalOpen={setProjectModalOpen} />}
-          />
+          <Route path={"/projects"} element={<Screens />} />
           <Route path={"/projects/:projectId/*"} element={<Project />} />
           <Navigate to={"/projects"} />
         </Routes>
         {/* <hr />
         <TsUseArray /> */}
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+      <ProjectModal />
       <Aside>Aside</Aside>
       <Footer>Footer</Footer>
     </Container>
