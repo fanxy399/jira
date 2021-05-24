@@ -29,7 +29,7 @@ export interface User {
 
 export default function List({ users, refresh, ...props }: ListProps) {
   const { mutate } = useEditProject();
-  const { open } = useProjectModal();
+  const { startEdit } = useProjectModal();
   return (
     <Table
       rowKey={"id"}
@@ -42,7 +42,7 @@ export default function List({ users, refresh, ...props }: ListProps) {
               <CustomRate
                 checked={project.pin}
                 onCheckedChange={(pin) => {
-                  mutate({ id: project.id, pin }).then(() => refresh?.());
+                  mutate({ id: project.id, pin });
                 }}
               />
             );
@@ -85,11 +85,14 @@ export default function List({ users, refresh, ...props }: ListProps) {
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"edit"}>
-                      <ButtonNoPadding type={"link"} onClick={() => open()}>
-                        编辑
-                      </ButtonNoPadding>
+                    <Menu.Item
+                      key={"edit"}
+                      onClick={() => startEdit(project.id)}
+                    >
+                      {" "}
+                      编辑
                     </Menu.Item>
+                    <Menu.Item key={"delete"}> 删除</Menu.Item>
                   </Menu>
                 }
               >

@@ -4,9 +4,10 @@ import Register from "Screens/Unauthenticated/Register";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
-import { Button, Card, Divider, Typography } from "antd";
+import { Button, Card, Divider } from "antd";
 import styled from "styled-components";
 import { useDoucmentTitle } from "utils";
+import { ErrorBox } from "components/lib";
 
 export default function Unauthenticated() {
   const [isRegister, setIsRegister] = useState(false);
@@ -22,9 +23,7 @@ export default function Unauthenticated() {
       <Background />
       <ShadowCard>
         <Title>{isRegister ? "请注册" : "请登录"}</Title>
-        {error && (
-          <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
-        )}
+        <ErrorBox error={error} />
         {isRegister ? (
           <Register onError={setError} />
         ) : (

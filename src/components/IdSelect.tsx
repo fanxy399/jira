@@ -10,7 +10,7 @@ interface IdSelectProps
     "value" | "onChange" | "defaultOptionName" | "options"
   > {
   value?: Row | null | undefined;
-  onChange: (value?: number) => void;
+  onChange?: (value?: number) => void;
   defaultOptionName?: string;
   options?: { name: string; id: number }[];
 }
@@ -20,7 +20,7 @@ export default function IdSelect(props: IdSelectProps) {
   return (
     <Select
       value={options?.length ? toNumber(value) : 0}
-      onChange={(value) => onChange(toNumber(value) || undefined)}
+      onChange={(value) => onChange?.(toNumber(value) || undefined)}
       {...restProps}
     >
       {defaultOptionName && (

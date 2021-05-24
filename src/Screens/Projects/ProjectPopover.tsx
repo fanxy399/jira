@@ -2,11 +2,11 @@ import { Popover, Typography, List, Divider } from "antd";
 import { ButtonNoPadding } from "components/lib";
 import React from "react";
 import styled from "styled-components";
-import { useProject } from "utils/project";
+import { useProjects } from "utils/project";
 import { useProjectModal } from "./util";
 
 export default function ProjectPopover() {
-  const { isLoading, data: projectList } = useProject();
+  const { isLoading, data: projectList } = useProjects();
   const { open } = useProjectModal();
   const pinedPorjectList = projectList?.filter((el) => el.pin);
   const content = (
