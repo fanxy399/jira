@@ -5,7 +5,7 @@ import { ErrorBox } from "components/lib";
 import UserSelect from "components/UserSelect";
 import React from "react";
 import { useAddProject, useEditProject } from "utils/project";
-import { useProjectModal } from "./util";
+import { useProjectModal, useProjectsQueryKey } from "./util";
 import styled from "styled-components";
 
 export default function ProjectModal() {
@@ -18,7 +18,9 @@ export default function ProjectModal() {
   const title = editingProject ? "编辑项目" : "新建项目";
   const [form] = Form.useForm();
   const useMutateProject = editingProject ? useEditProject : useAddProject;
-  const { mutateAsync, isLoading: mutateLoading, error } = useMutateProject();
+  const { mutateAsync, isLoading: mutateLoading, error } = useMutateProject(
+    useProjectsQueryKey()
+  );
   const onFinish = (value: any) => {
     mutateAsync({ ...editingProject, ...value }).then(() => {
       handleClose();
