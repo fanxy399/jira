@@ -2,6 +2,8 @@ import { Project } from "Screens/Projects/List";
 import { cleanObject } from "utils";
 import { useHttp } from "./http";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useSearchParams } from "react-router-dom";
+import { useProjectSearchParams } from "Screens/Projects/util";
 
 export const useProjects = (params?: Partial<Project>) => {
   const client = useHttp();
@@ -13,6 +15,8 @@ export const useProjects = (params?: Partial<Project>) => {
 export const useEditProject = () => {
   const client = useHttp();
   const queryClient = useQueryClient();
+  const [searchParams] = useProjectSearchParams();
+  const queryKey = ["projects", searchParams];
   return useMutation(
     (params: Partial<Project>) =>
       client(`projects/${params.id}`, {
@@ -21,6 +25,23 @@ export const useEditProject = () => {
       }),
     {
       onSuccess: () => queryClient.invalidateQueries("projects"),
+      async onMutate(target: Partial<Project>) {
+        const previousItems = queryClient.getQueryData(queryKey);
+        queryClient.setQueryData(queryKey, (old?: Project[]) => {
+          return (
+            old?.map((project) =>
+              project.id === target.id ? { ...project, ...target } : project
+            ) || []
+          );
+        });
+        return { previousItems };
+      },
+      onError(error: Error, newItems: Partial<Project>, context: unknown) {
+        queryClient.setQueryData(
+          queryKey,
+          (context as { previousItems: Project[] }).previousItems
+        );
+      },
     }
   );
 };
