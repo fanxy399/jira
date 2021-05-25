@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import * as auth from "auth-provider";
-import { User } from "Screens/Projects/List";
+import { User } from "types/user";
 import { http } from "utils/http";
 import { useMount } from "utils";
 import { useAsync } from "utils/useAsync";

@@ -1,4 +1,5 @@
-import { Project, User } from "Screens/Projects/List";
+import { User } from "types/user";
+import { Project } from "types/project";
 import { Input, Form } from "antd";
 import UserSelect from "components/UserSelect";
 

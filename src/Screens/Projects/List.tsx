@@ -6,25 +6,12 @@ import CustomRate from "components/CustomRate";
 import { useDeleteProject, useEditProject } from "utils/project";
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModal, useProjectsQueryKey } from "./util";
+import { Project } from "types/project";
+import { User } from "types/user";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?: () => void;
-}
-
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  organization: string;
-  pin: boolean;
-  created: number;
-}
-
-export interface User {
-  id: number;
-  name: string;
-  token: string;
 }
 
 export default function List({ users, refresh, ...props }: ListProps) {
