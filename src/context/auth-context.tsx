@@ -5,6 +5,7 @@ import { http } from "utils/http";
 import { useMount } from "utils";
 import { useAsync } from "utils/useAsync";
 import { FullPageLoading, FullPageErrorFallback } from "components/lib";
+import { useQueryClient } from "react-query";
 
 interface Authform {
   username: string;
@@ -43,10 +44,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setData: setUser,
     data: user,
   } = useAsync<User | null>();
+  const queryClient = useQueryClient();
   const login = (form: Authform) =>
     auth.login(form).then((user) => setUser(user));
   const register = (form: Authform) => auth.register(form).then(setUser); // setUser === (user => setUser(user)) 消除参数
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
   useMount(() => {
     run(bootstrapUser());
   });
