@@ -16,7 +16,7 @@ export default function Screens() {
   useDoucmentTitle("项目列表", false);
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Row between={true} style={{ marginBottom: "2rem" }}>
         <h2>项目列表</h2>
         <Button onClick={() => open()}>创建项目</Button>

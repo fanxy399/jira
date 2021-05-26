@@ -75,7 +75,7 @@ const Container = styled.div`
   height: 100vh;
   display: grid;
   grid-template-areas: "header header header" "nav main aside" "footer footer footer";
-  grid-template-columns: 30rem 1fr 30rem;
+  grid-template-columns: 20rem 1fr 20rem;
   grid-template-rows: 6rem 1fr 10rem;
   grid-gap: 2rem;
 `;
@@ -99,6 +99,8 @@ const Nav = styled.nav`
 
 const Main = styled.main`
   grid-area: main;
+  overflow: hidden;
+  display: flex;
 `;
 const Aside = styled.aside`
   grid-area: aside;

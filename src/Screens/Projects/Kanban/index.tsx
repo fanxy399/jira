@@ -1,3 +1,4 @@
+import { ScreenContainer } from "components/lib";
 import React from "react";
 import styled from "styled-components";
 import { useDoucmentTitle } from "utils";
@@ -11,20 +12,20 @@ export default function Kanban() {
   const { data: project } = useProjectInUrl();
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
   return (
-    <div>
+    <ScreenContainer>
       <h1>{project?.name}看板</h1>
       <SearchPanel />
-      <KanbanColumnContainer>
+      <ColumnsContainer>
         {kanbans?.map((kanban) => (
           <KanbanColumn key={kanban.id} kanban={kanban} />
         ))}
-      </KanbanColumnContainer>
-    </div>
+      </ColumnsContainer>
+    </ScreenContainer>
   );
 }
 
-const KanbanColumnContainer = styled.div`
+export const ColumnsContainer = styled("div")`
   display: flex;
-  overflow: hidden;
-  margin-right: 2rem;
+  /* justify-content: space-between; */
+  flex: 1;
 `;
