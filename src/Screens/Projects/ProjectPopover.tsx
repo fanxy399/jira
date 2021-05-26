@@ -6,7 +6,7 @@ import { useProjects } from "utils/project";
 import { useProjectModal } from "./util";
 
 export default function ProjectPopover() {
-  const { isLoading, data: projectList } = useProjects();
+  const { data: projectList } = useProjects();
   const { open } = useProjectModal();
   const pinedPorjectList = projectList?.filter((el) => el.pin);
   const content = (

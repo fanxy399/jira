@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useDoucmentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
 import KanbanColumn from "./KanbanColumn";
+import SearchPanel from "./SearchPanel";
 import { useKanbanSearchParams, useProjectInUrl } from "./util";
 
 export default function Kanban() {
@@ -12,6 +13,7 @@ export default function Kanban() {
   return (
     <div>
       <h1>{project?.name}看板</h1>
+      <SearchPanel />
       <KanbanColumnContainer>
         {kanbans?.map((kanban) => (
           <KanbanColumn key={kanban.id} kanban={kanban} />

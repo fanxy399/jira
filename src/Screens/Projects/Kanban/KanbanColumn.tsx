@@ -1,7 +1,7 @@
 import React from "react";
 import { Kanan } from "types/kanban";
 import { useTasks } from "utils/task";
-import { useTaskSearchParams } from "./util";
+import { useTasksSearchParams } from "./util";
 import taskIcon from "assets/task.svg";
 import bugIcon from "assets/bug.svg";
 import { useTaskType } from "utils/taskType";
@@ -15,8 +15,8 @@ const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
 };
 
 export default function KanbanColumn({ kanban }: { kanban: Kanan }) {
-  const { data: allTasks } = useTasks(useTaskSearchParams());
-  const tasks = allTasks?.filter((task) => task.id === kanban.id);
+  const { data: allTasks } = useTasks(useTasksSearchParams());
+  const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
   return (
     <KanbanContainer>
       <h2>{kanban.name}</h2>

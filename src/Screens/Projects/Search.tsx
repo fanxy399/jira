@@ -15,6 +15,7 @@ export default function Search(props: SearchProps) {
     <Form style={{ marginBottom: "1rem" }} layout="inline">
       <Form.Item>
         <Input
+          allowClear
           placeholder="项目名"
           style={{ marginRight: "50px" }}
           type="text"

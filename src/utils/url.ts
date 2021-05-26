@@ -4,7 +4,7 @@ import { cleanObject } from "utils";
 
 export const useUrlQueryParams = <K extends string>(keys: K[]) => {
   const [searchParams] = useSearchParams();
-  const urlSearchParams = useUrlSearchParams();
+  const urlSearchParams = useSetUrlSearchParams();
   return [
     useMemo(
       () =>
@@ -20,7 +20,7 @@ export const useUrlQueryParams = <K extends string>(keys: K[]) => {
   ] as const;
 };
 
-export const useUrlSearchParams = () => {
+export const useSetUrlSearchParams = () => {
   const [searchParams, setSearchParam] = useSearchParams();
   return (params: { [key in string]: unknown }) => {
     const o = cleanObject({

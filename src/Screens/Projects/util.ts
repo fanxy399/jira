@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useProject } from "utils/project";
 
-import { useUrlQueryParams, useUrlSearchParams } from "utils/url";
+import { useUrlQueryParams, useSetUrlSearchParams } from "utils/url";
 
 // 项目列表搜索的参数
 export const useProjectSearchParams = () => {
@@ -27,7 +27,7 @@ export const useProjectModal = () => {
   const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParams([
     "editingProjectId",
   ]);
-  const setUrlParams = useUrlSearchParams();
+  const setUrlParams = useSetUrlSearchParams();
   const { data: editingProject, isLoading } = useProject(+editingProjectId);
   const startEdit = (id: number) =>
     setEditingProjectId({ editingProjectId: id });

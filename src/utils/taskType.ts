@@ -4,5 +4,5 @@ import { useHttp } from "./http";
 
 export const useTaskType = () => {
   const client = useHttp();
-  return useQuery<TaskType[]>("taskType", () => client("taskType"));
+  return useQuery<TaskType[]>("taskType", () => client("taskTypes"));
 };
