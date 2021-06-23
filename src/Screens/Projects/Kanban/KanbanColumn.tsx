@@ -1,5 +1,5 @@
 import React from "react";
-import { Kanan } from "types/kanban";
+import { Kanban } from "types/kanban";
 import { useTasks } from "utils/task";
 import { useTasksSearchParams } from "./util";
 import taskIcon from "assets/task.svg";
@@ -7,6 +7,7 @@ import bugIcon from "assets/bug.svg";
 import { useTaskType } from "utils/taskType";
 import { Card } from "antd";
 import styled from "styled-components";
+import CreateTask from "./CreateTask";
 
 const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   const { data: taskTypes } = useTaskType();
@@ -14,7 +15,7 @@ const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   return <img src={name === "task" ? taskIcon : bugIcon} alt={"task-icon"} />;
 };
 
-export default function KanbanColumn({ kanban }: { kanban: Kanan }) {
+export default function KanbanColumn({ kanban }: { kanban: Kanban }) {
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
   return (
@@ -27,12 +28,13 @@ export default function KanbanColumn({ kanban }: { kanban: Kanan }) {
             <TaskTypeIcon typeId={task.typeId} />
           </Card>
         ))}
+        <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
     </KanbanContainer>
   );
 }
 
-const KanbanContainer = styled.div`
+export const KanbanContainer = styled.div`
   min-width: 27rem;
   border-radius: 6px;
   background-color: rgb(244, 245, 247);

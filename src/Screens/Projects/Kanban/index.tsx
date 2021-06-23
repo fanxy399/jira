@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useDoucmentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
 import { useTasks } from "utils/task";
+import CreateKanban from "./CreateKanban";
 import KanbanColumn from "./KanbanColumn";
 import SearchPanel from "./SearchPanel";
 import {
@@ -33,6 +34,7 @@ export default function Kanban() {
             <KanbanColumn key={kanban.id} kanban={kanban} />
           ))
         )}
+        <CreateKanban />
       </ColumnsContainer>
     </ScreenContainer>
   );
@@ -41,6 +43,16 @@ export default function Kanban() {
 export const ColumnsContainer = styled("div")`
   display: flex;
   flex: 1;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 3px #9b9ba3;
+    background: rgba(152, 155, 163, 0.5);
+  }
   .ant-spin {
     width: 100%;
     display: flex;
