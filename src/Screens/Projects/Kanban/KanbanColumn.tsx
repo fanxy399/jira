@@ -1,13 +1,16 @@
 import React from "react";
 import { Kanban } from "types/kanban";
 import { useTasks } from "utils/task";
-import { useTasksModal, useTasksSearchParams } from "./util";
+import { useKanbanQueryKey, useTasksModal, useTasksSearchParams } from "./util";
 import taskIcon from "assets/task.svg";
 import bugIcon from "assets/bug.svg";
 import { useTaskType } from "utils/taskType";
-import { Card } from "antd";
+import { Button, Card, Dropdown, Menu, Modal } from "antd";
 import styled from "styled-components";
 import CreateTask from "./CreateTask";
+import { Row } from "components/lib";
+import Mark from "components/Mark";
+import { useDeleteKanban } from "utils/kanban";
 
 const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   const { data: taskTypes } = useTaskType();
@@ -15,13 +18,45 @@ const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   return <img src={name === "task" ? taskIcon : bugIcon} alt={"task-icon"} />;
 };
 
+const More = ({ kanban }: { kanban: Kanban }) => {
+  const { mutate: deleteKanban } = useDeleteKanban(useKanbanQueryKey());
+  const startDelete = () => {
+    Modal.confirm({
+      okText: "确定",
+      cancelText: "取消",
+      title: "确定要删除看板吗？",
+      onOk() {
+        deleteKanban({ id: +kanban.id });
+      },
+    });
+  };
+  const overlay = (
+    <Menu>
+      <Menu.Item>
+        <Button type={"link"} onClick={startDelete}>
+          删除
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
+  return (
+    <Dropdown overlay={overlay}>
+      <Button type={"link"}>...</Button>
+    </Dropdown>
+  );
+};
+
 export default function KanbanColumn({ kanban }: { kanban: Kanban }) {
   const { startEdit } = useTasksModal();
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
+  const { name: keyword } = useTasksSearchParams();
   return (
     <KanbanContainer>
-      <h2>{kanban.name}</h2>
+      <Row between={true}>
+        <h2>{kanban.name}</h2>
+        <More kanban={kanban} />
+      </Row>
       <TaskContainer>
         {tasks?.map((task) => (
           <Card
@@ -31,7 +66,9 @@ export default function KanbanColumn({ kanban }: { kanban: Kanban }) {
             key={task.id}
             style={{ marginBottom: "0.5rem", cursor: "pointer" }}
           >
-            <div>{task.name}</div>
+            <p>
+              <Mark name={task.name} keyword={keyword} />
+            </p>
             <TaskTypeIcon typeId={task.typeId} />
           </Card>
         ))}
