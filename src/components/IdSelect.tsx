@@ -26,8 +26,10 @@ export default function IdSelect(props: IdSelectProps) {
       {defaultOptionName && (
         <Select.Option value={0}>{defaultOptionName}</Select.Option>
       )}
-      {options?.map((option) => (
-        <Select.Option value={option.id}>{option.name}</Select.Option>
+      {options?.map((option, index) => (
+        <Select.Option key={index} value={option.id}>
+          {option.name}
+        </Select.Option>
       ))}
     </Select>
   );

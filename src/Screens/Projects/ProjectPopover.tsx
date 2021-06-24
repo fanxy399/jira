@@ -13,8 +13,8 @@ export default function ProjectPopover() {
     <ContentContainer>
       <Typography.Text type={"secondary"}>收藏项目</Typography.Text>
       <List>
-        {pinedPorjectList?.map((project) => (
-          <List.Item>
+        {pinedPorjectList?.map((project, index) => (
+          <List.Item key={index}>
             <List.Item.Meta title={project.name} />
           </List.Item>
         ))}

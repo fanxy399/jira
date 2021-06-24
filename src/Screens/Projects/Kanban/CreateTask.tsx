@@ -7,11 +7,11 @@ import { useProjectIdInUrl, useTasksQueryKey } from "./util";
 export default function CreateTask({ kanbanId }: { kanbanId: number }) {
   const [name, setName] = useState("");
   const projectId = useProjectIdInUrl();
-  const { mutateAsync } = useAddTask(useTasksQueryKey());
+  const { mutateAsync: addTask } = useAddTask(useTasksQueryKey());
   const [inputMode, setInputMode] = useState(false);
 
   const submit = async () => {
-    await mutateAsync({ name, projectId, kanbanId });
+    await addTask({ name, projectId, kanbanId });
     setInputMode(false);
     setName("");
   };
