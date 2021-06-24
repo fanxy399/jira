@@ -11,6 +11,7 @@ import CreateTask from "./CreateTask";
 import { Row } from "components/lib";
 import Mark from "components/Mark";
 import { useDeleteKanban } from "utils/kanban";
+import { Drag, Drop, DropChild } from "components/DrapAndDrop";
 
 const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   const { data: taskTypes } = useTaskType();
@@ -46,37 +47,56 @@ const More = ({ kanban }: { kanban: Kanban }) => {
   );
 };
 
-export default function KanbanColumn({ kanban }: { kanban: Kanban }) {
+export const KanbanColumn = React.forwardRef<
+  HTMLDivElement,
+  { kanban: Kanban }
+>(({ kanban, ...props }, ref) => {
   const { startEdit } = useTasksModal();
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
   const { name: keyword } = useTasksSearchParams();
   return (
-    <KanbanContainer>
+    <KanbanContainer ref={ref} {...props}>
       <Row between={true}>
         <h2>{kanban.name}</h2>
         <More kanban={kanban} />
       </Row>
       <TaskContainer>
-        {tasks?.map((task) => (
-          <Card
-            onClick={() => {
-              startEdit(task.id);
-            }}
-            key={task.id}
-            style={{ marginBottom: "0.5rem", cursor: "pointer" }}
-          >
-            <p>
-              <Mark name={task.name} keyword={keyword} />
-            </p>
-            <TaskTypeIcon typeId={task.typeId} />
-          </Card>
-        ))}
+        <Drop
+          type={"ROW"}
+          direction={"vertical"}
+          droppableId={"kanban" + kanban.id}
+        >
+          <DropChild style={{ minHeight: "1rem" }}>
+            {tasks?.map((task, taskIndex) => (
+              <Drag
+                key={task.id}
+                index={taskIndex}
+                draggableId={"task" + task.id}
+              >
+                <div>
+                  <Card
+                    onClick={() => {
+                      startEdit(task.id);
+                    }}
+                    key={task.id}
+                    style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+                  >
+                    <p>
+                      <Mark name={task.name} keyword={keyword} />
+                    </p>
+                    <TaskTypeIcon typeId={task.typeId} />
+                  </Card>
+                </div>
+              </Drag>
+            ))}
+          </DropChild>
+        </Drop>
         <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
     </KanbanContainer>
   );
-}
+});
 
 export const KanbanContainer = styled.div`
   min-width: 27rem;

@@ -6,14 +6,16 @@ import { useDoucmentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
 import { useTasks } from "utils/task";
 import CreateKanban from "./CreateKanban";
-import KanbanColumn from "./KanbanColumn";
+import { KanbanColumn } from "./KanbanColumn";
 import SearchPanel from "./SearchPanel";
 import TaskModal from "./TaskModal";
+import { DragDropContext } from "react-beautiful-dnd";
 import {
   useKanbanSearchParams,
   useProjectInUrl,
   useTasksSearchParams,
 } from "./util";
+import { Drop, DropChild, Drag } from "components/DrapAndDrop";
 
 export default function Kanban() {
   useDoucmentTitle("看板列表");
@@ -24,21 +26,37 @@ export default function Kanban() {
   const { isLoading: taskLoading } = useTasks(useTasksSearchParams());
   const isLoading = kanbanLoading || taskLoading;
   return (
-    <ScreenContainer>
-      <h1>{project?.name}看板</h1>
-      <SearchPanel />
-      <ColumnsContainer>
-        {isLoading ? (
-          <Spin tip="Loading..." />
-        ) : (
-          kanbans?.map((kanban) => (
-            <KanbanColumn key={kanban.id} kanban={kanban} />
-          ))
-        )}
-        <CreateKanban />
-        <TaskModal />
-      </ColumnsContainer>
-    </ScreenContainer>
+    <DragDropContext onDragEnd={() => {}}>
+      <ScreenContainer>
+        <h1>{project?.name}看板</h1>
+        <SearchPanel />
+        <ColumnsContainer>
+          {isLoading ? (
+            <Spin tip="Loading..." />
+          ) : (
+            <Drop
+              type={"CLOUMN"}
+              direction={"horizontal"}
+              droppableId={"kanban"}
+            >
+              <DropChild style={{ display: "flex" }}>
+                {kanbans?.map((kanban, index) => (
+                  <Drag
+                    key={kanban.id}
+                    draggableId={"kanban" + kanban.id}
+                    index={index}
+                  >
+                    <KanbanColumn kanban={kanban} />
+                  </Drag>
+                ))}
+              </DropChild>
+            </Drop>
+          )}
+          <CreateKanban />
+          <TaskModal />
+        </ColumnsContainer>
+      </ScreenContainer>
+    </DragDropContext>
   );
 }
 
@@ -48,7 +66,7 @@ export const ColumnsContainer = styled("div")`
   overflow-x: scroll;
   &::-webkit-scrollbar {
     width: 5px;
-    height: 5px;
+    height: 8px;
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
