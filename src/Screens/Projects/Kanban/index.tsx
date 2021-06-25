@@ -14,6 +14,7 @@ import {
   useKanbanSearchParams,
   useProjectInUrl,
   useTasksSearchParams,
+  useDragEnd,
 } from "./util";
 import { Drop, DropChild, Drag } from "components/DrapAndDrop";
 
@@ -25,8 +26,9 @@ export default function Kanban() {
   );
   const { isLoading: taskLoading } = useTasks(useTasksSearchParams());
   const isLoading = kanbanLoading || taskLoading;
+  const onDragEnd = useDragEnd();
   return (
-    <DragDropContext onDragEnd={() => {}}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <ScreenContainer>
         <h1>{project?.name}看板</h1>
         <SearchPanel />
