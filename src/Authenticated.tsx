@@ -11,6 +11,7 @@ import Project from "Screens/Projects/Project";
 import { resetRoute } from "utils";
 import ProjectModal from "Screens/Projects/ProjectModal";
 import ProjectPopover from "Screens/Projects/ProjectPopover";
+import UserPopover from "Screens/Projects/UserPopover";
 
 const User = () => {
   const { user, logout } = useAuth();
@@ -41,7 +42,7 @@ const PageHeader = () => {
           <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
         </ButtonNoPadding>
         <ProjectPopover />
-        <span>用户</span>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />
