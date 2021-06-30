@@ -16,7 +16,7 @@ import { Drag, Drop, DropChild } from "components/DrapAndDrop";
 const TaskTypeIcon = ({ typeId }: { typeId: number }) => {
   const { data: taskTypes } = useTaskType();
   const name = taskTypes?.find((taskType) => taskType.id === typeId)?.name;
-  return <img src={name === "task" ? taskIcon : bugIcon} alt={"task-icon"} />;
+  return <img src={name === "bug" ? bugIcon : taskIcon} alt={"task-icon"} />;
 };
 
 const More = ({ kanban }: { kanban: Kanban }) => {

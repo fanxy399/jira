@@ -2,7 +2,7 @@ import { Menu } from "antd";
 import { Routes, Route, Navigate, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Epic from "../Epic";
+import EpicScreen from "../Epic";
 import Kanban from "../Kanban";
 
 const useRouteType = () => {
@@ -27,7 +27,7 @@ export default function Project() {
       <Main>
         <Routes>
           <Route path={"kanban"} element={<Kanban />} />
-          <Route path={"epic"} element={<Epic />} />
+          <Route path={"epic"} element={<EpicScreen />} />
           <Navigate to={"kanban"} replace={true} />
         </Routes>
       </Main>
