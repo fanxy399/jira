@@ -12,7 +12,7 @@ export default function Mark({
   return (
     <>
       {arr.map((item, index) => (
-        <span>
+        <span key={index}>
           {item}
           {index === arr.length - 1 ? null : (
             <span style={{ color: "#257AFD" }}>{keyword}</span>

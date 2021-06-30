@@ -1,5 +1,4 @@
 import { Drawer, DrawerProps, Input, Spin, Form, Button } from "antd";
-import { useForm } from "antd/lib/form/Form";
 import { ErrorBox } from "components/lib";
 import { useEffect } from "react";
 import styled from "styled-components";
@@ -15,7 +14,7 @@ export default function CreateEpic({
     useEpicQueryKey()
   );
   const projectId = useProjectIdInUrl();
-  const [form] = useForm();
+  const [form] = Form.useForm();
   const onFinish = async (values: any) => {
     await addEpic({ ...values, projectId });
     onClose();

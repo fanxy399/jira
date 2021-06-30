@@ -5,18 +5,15 @@ import reportWebVitals from "reportWebVitals";
 import { DevTools, loadServer } from "jira-dev-tool";
 import "antd/dist/antd.less";
 import { AppProvider } from "context";
-import { BrowserRouter as Router } from "react-router-dom";
 
 loadServer(() => {
   ReactDOM.render(
-    <Router>
-      <React.StrictMode>
-        <AppProvider>
-          <DevTools />
-          <App />
-        </AppProvider>
-      </React.StrictMode>
-    </Router>,
+    <React.StrictMode>
+      <AppProvider>
+        <DevTools />
+        <App />
+      </AppProvider>
+    </React.StrictMode>,
     document.getElementById("root")
   );
 });

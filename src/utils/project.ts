@@ -10,7 +10,7 @@ import {
 
 export const useProjects = (params?: Partial<Project>) => {
   const client = useHttp();
-  return useQuery<Project[]>(["projects", params], () =>
+  return useQuery<Project[]>(["projects", cleanObject(params)], () =>
     client("projects", { data: cleanObject(params || {}) })
   );
 };
